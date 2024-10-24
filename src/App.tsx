@@ -26,6 +26,12 @@ export interface TxCounter {
   tonTx: number;
 }
 
+export interface CoinCount {
+  crypto: string
+  frontier:string
+  _id:string
+}
+
 export interface PrinterMessage {
   0 : {
     mes:string

@@ -54,6 +54,9 @@ const ColumnElement: React.FC<ColumnElementProps> = ({
     setIsNew(currentDate.getTime() - date.getTime() < 3600000);
   };
 
+  const afterMainCount = item.value;
+  console.log(afterMainCount.toString().length);
+
   const copyHandler = (value: string) => {
     navigator.clipboard.writeText(value);
   };
@@ -191,7 +194,17 @@ Time: ${item.moment}`);
       <p className="text-white">
         Value:{" "}
         <span className="text-gray-300">
-          {!disabled ? priceReplaceHandler(item.value) : 0}
+          {!disabled
+            ? priceReplaceHandler(Number(item.value.toString().split(".")[0]))
+            : 0}
+          .
+          {!disabled
+            ? item.value.toString().split(".")[1]?.length == 2
+              ? item.value.toString().split(".")[1]
+              : item.value.toString().split(".")[1]?.length == 1
+              ? item.value.toString().split(".")[1] + "0"
+              : "00"
+            : 0}
         </span>{" "}
         <span className="uppercase text-gray-300">
           {!disabled ? item.type : "SOL"}

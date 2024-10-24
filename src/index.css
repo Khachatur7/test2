@@ -143,6 +143,7 @@ body,
   font-size: 21px;
   text-decoration: underline;
   cursor: pointer;
+  margin-top: 10px;
 }
 .exit_donate_module:hover {
   animation-name: exit_bttn;

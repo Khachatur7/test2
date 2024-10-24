@@ -9,6 +9,7 @@ import usdtImg from "../../images/usdt.png";
 import usdsImg from "../../images/usdc.png";
 import bnbImg from "../../images/bnb.png";
 import solimg from "../../images/sol.png";
+import tonImg from "../../images/toncoin.svg"
 import LineChart from "../LineChart";
 
 interface ColumnProps extends React.PropsWithChildren {
@@ -48,10 +49,13 @@ const OnlineCheck: React.FC<OnlineCheckProps> = ({
     const target = event?.target as HTMLElement;
     const element = target;
     const closestElement = target.closest(".chart");
-    
+
     if (element?.classList.contains(`${currency}`)) {
       setShowChart(true);
-    } else if (!element?.classList.contains(`${currency}`) && !closestElement?.classList.contains(`chart`)) {
+    } else if (
+      !element?.classList.contains(`${currency}`) &&
+      !closestElement?.classList.contains(`chart`)
+    ) {
       setShowChart(false);
     }
   };
@@ -105,6 +109,10 @@ const OnlineCheck: React.FC<OnlineCheckProps> = ({
       return solimg;
     } else if (logoName == "sol" && !online) {
       return solimg;
+    } else if (logoName == "ton" && online) {
+      return tonImg;
+    } else if (logoName == "ton" && !online) {
+      return tonImg;
     }
   };
 

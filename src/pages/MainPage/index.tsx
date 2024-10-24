@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "../../axios";
-import { ItemDataType, TxCounter } from "../../App";
+import { CoinCount, ItemDataType, TxCounter } from "../../App";
 import { Column } from "../../components";
 import TopHeader from "../../components/TopHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import TopHeaderTel from "../../components/TopHeaderTel";
+import { priceReplaceHandler } from "../../handlers";
 const MainPage = () => {
   const [btc, setBTC] = useState<ItemDataType[] | null>(null);
   const [eth, setETH] = useState<ItemDataType[] | null>(null);
@@ -27,6 +28,10 @@ const MainPage = () => {
   const [usdcInDay, setUsdcInDay] = useState<number | null>(null);
   const [bnbInDay, setBnbInDay] = useState<number | null>(null);
   const [tonInDay, setTonInDay] = useState<number | null>(null);
+  const [coinsCount, setCoinsCount] = useState({
+    bnb: "0",
+    ton: "0",
+  });
 
   const [loading, setLoading] = useState(true);
   const [online, setOnline] = useState({
@@ -99,7 +104,7 @@ const MainPage = () => {
             }
           }
         }
-        
+
         // далее если в state уже загружался массив,то мы добавляем новый сохраняя старый
         // (это выполняется,когда нужно уже подгрузить новые данные при скролле вниз)
         if (state && state.length > 0) {
@@ -114,7 +119,6 @@ const MainPage = () => {
       if (!sol?.length && name == "usdt") {
         setSol(currencyItems);
       }
-   
     } catch (error) {
       console.log(`Не удалось получить данные про ${name}`);
     }
@@ -154,12 +158,11 @@ const MainPage = () => {
   const getOnline = async () => {
     try {
       const res = await axios.get("/pultikMon");
-console.log(res.data.answer);
 
       if (!res.data) {
         throw Error();
       }
-      
+
       setOnline({
         btc: {
           name: online.btc.name,
@@ -228,6 +231,20 @@ console.log(res.data.answer);
     setState(TxinDay);
   };
 
+  const getCoinCount = async () => {
+    try {
+      const res = await axios.get<{ result: CoinCount[] }>("/frontier");
+      if (res.data) {
+        setCoinsCount({
+          bnb: res.data.result[0].frontier,
+          ton: res.data.result[1].frontier,
+        });
+      }
+    } catch (error) {
+      console.log(`Не удалось получить данные про количество монет`);
+    }
+  };
+
   const updateData = useMemo(() => {
     UpdateData("btc", setBTC, btc);
     UpdateData("eth", setETH, eth);
@@ -249,7 +266,7 @@ console.log(res.data.answer);
     getTXinDay("usdc", setUsdcInDay);
     getTXinDay("bnb", setBnbInDay);
     getTXinDay("ton", setTonInDay);
-
+    getCoinCount();
     const interval = setInterval(() => {
       setUpdate(true);
     }, 30000);
@@ -287,8 +304,7 @@ console.log(res.data.answer);
         getData("usdc", setUSDC, usdc);
       } else if (currencyName == "bnb") {
         getData("bnb", setBnb, bnb);
-      }
-      else if (currencyName == "ton") {
+      } else if (currencyName == "ton") {
         getData("ton", setTon, ton);
       }
     }
@@ -354,7 +370,7 @@ console.log(res.data.answer);
             />
             <Column
               id={online.bnb.name}
-              title={`More than\n20 000 BNB`}
+              title={`More than\n${priceReplaceHandler(+coinsCount.bnb)} BNB`}
               items={bnb}
               countValue={txCounter?.bnbTx}
               online={online.bnb.on}
@@ -365,13 +381,14 @@ console.log(res.data.answer);
             />
             <Column
               id={online.ton.name}
-              title={`More than\n100 000 TON`}
+              title={`More than\n${priceReplaceHandler(+coinsCount.ton)} TON`}
               items={ton}
               countValue={txCounter?.tonTx}
               scroll={handleScroll}
               touchMove={handleScroll}
               online={online.ton.on}
               txInDay={tonInDay}
+              currency="toncoin"
             />
             <Column
               id={online.sol.name}
@@ -449,7 +466,7 @@ console.log(res.data.answer);
             <SwiperSlide style={{ width: "100%" }}>
               <Column
                 id={online.bnb.name}
-                title={`More than\n20 000 BNB`}
+                title={`More than\n${coinsCount.bnb} BNB`}
                 items={bnb}
                 countValue={txCounter?.bnbTx}
                 online={online.bnb.on}
@@ -461,22 +478,25 @@ console.log(res.data.answer);
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
+                id={online.ton.name}
+                title={`More than\n${coinsCount.ton} TON`}
+                items={ton}
+                countValue={txCounter?.tonTx}
+                scroll={handleScroll}
+                touchMove={handleScroll}
+                online={online.ton.on}
+                txInDay={tonInDay}
+                currency="toncoin"
+              />
+            </SwiperSlide>
+            <SwiperSlide style={{ width: "100%" }}>
+              <Column
                 id={online.sol.name}
                 title={`SOL\n(in development)`}
                 items={sol}
                 countValue={txCounter?.solTx}
                 disabled
                 online={online.sol.on}
-              />
-            </SwiperSlide>
-            <SwiperSlide style={{ width: "100%" }}>
-              <Column
-                id={online.ton.name}
-                title={`TON\n(in development)`}
-                items={ton}
-                countValue={txCounter?.tonTx}
-                disabled
-                online={online.ton.on}
               />
             </SwiperSlide>
           </Swiper>

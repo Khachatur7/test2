@@ -39,6 +39,7 @@ interface LineChart {
 // ethereum
 // bitcoin
 // binancecoin
+// toncoin
 
 const LineChart: React.FC<LineChart> = ({
   active,
@@ -94,7 +95,6 @@ const LineChart: React.FC<LineChart> = ({
   };
 
   useEffect(() => {
-    
     // if (window.innerWidth < 800 && active && touchCount==0) {
     //   setTimeout(() => {
     //     window.addEventListener("touchend", handleClickOutside);
