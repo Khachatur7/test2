@@ -54,9 +54,6 @@ const ColumnElement: React.FC<ColumnElementProps> = ({
     setIsNew(currentDate.getTime() - date.getTime() < 3600000);
   };
 
-  const afterMainCount = item.value;
-  console.log(afterMainCount.toString().length);
-
   const copyHandler = (value: string) => {
     navigator.clipboard.writeText(value);
   };
@@ -295,9 +292,11 @@ Time: ${item.moment}`);
             <a
               className="underline"
               href={
-                item.type != "bnb"
-                  ? `https://www.blockchain.com/explorer/search?search=${item.hash}`
-                  : `https://bscscan.com/tx/${item.hash}`
+                item.type == "bnb"
+                  ? `https://bscscan.com/tx/${item.hash}`
+                  : item.type == "ton"
+                  ? `https://tonscan.org/ru/tx/${item.hash}`
+                  : `https://www.blockchain.com/explorer/search?search=${item.hash}`
               }
               target="_blank"
             >

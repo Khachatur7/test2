@@ -34,12 +34,13 @@ interface LineChart {
   currency: string;
   setShowChart?: React.Dispatch<React.SetStateAction<boolean>>;
 }
-// usd-coin
-// tether
-// ethereum
-// bitcoin
-// binancecoin
-// toncoin
+// USDC
+// USDT
+// ETH
+// BTC
+// BNB
+// TON
+// SOL
 
 const LineChart: React.FC<LineChart> = ({
   active,
@@ -52,7 +53,8 @@ const LineChart: React.FC<LineChart> = ({
   const [labels, setLabels] = useState<string[]>([]);
   // const [touchCount, setTouchCount] = useState<number|string>(0);
 
-  const CoinGeckoAPI = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart?vs_currency=usd&days=365`;
+  const BinanceAPI = `https://api.binance.com/api/v3/klines?symbol=${currency}USDT&interval=1d&limit=365`;
+  const UsdtAPI = `https://api.coingecko.com/api/v3/coins/tether/market_chart?vs_currency=usd&days=365`;
   // let months: string[] = [
   //   "Jan",
   //   "Febr",
@@ -83,9 +85,23 @@ const LineChart: React.FC<LineChart> = ({
   //  }
   // };
 
-  const fetchData = async () => {
+  const BinanceFetchAPI = async () => {
     try {
-      const response = await axios.get<PriceData>(CoinGeckoAPI);
+      const response = await axios.get(BinanceAPI);
+
+      const prices = response.data;
+      setData(prices.map((price: any) => parseFloat(price[4]))); // Закрывающая цена
+      setLabels(
+        prices.map((price: any) => new Date(price[0]).toLocaleDateString())
+      ); // Даты
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const UsdtFetchAPI = async () => {
+    try {
+      const response = await axios.get<PriceData>(UsdtAPI);
       const prices = response.data.prices;
       setData(prices.map((price) => price[1])); // Цены
       setLabels(prices.map((price) => new Date(price[0]).toLocaleDateString())); // Даты
@@ -106,7 +122,11 @@ const LineChart: React.FC<LineChart> = ({
   }, [active]);
 
   useEffect(() => {
-    fetchData();
+    if (currency == "tether") {
+      UsdtFetchAPI();
+    } else {
+      BinanceFetchAPI();
+    }
   }, []);
 
   const options: ChartOptions<"line"> = {

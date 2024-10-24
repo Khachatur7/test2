@@ -333,7 +333,7 @@ const MainPage = () => {
               online={online.btc.on}
               scroll={handleScroll}
               touchMove={handleScroll}
-              currency="bitcoin"
+              currency="BTC"
             />
             <Column
               id={online.eth.name}
@@ -344,7 +344,7 @@ const MainPage = () => {
               online={online.eth.on}
               scroll={handleScroll}
               touchMove={handleScroll}
-              currency="ethereum"
+              currency="ETH"
             />
             <Column
               id={online.usdt.name}
@@ -366,7 +366,7 @@ const MainPage = () => {
               online={online.usdc.on}
               scroll={handleScroll}
               touchMove={handleScroll}
-              currency="usd-coin"
+              currency="USDC"
             />
             <Column
               id={online.bnb.name}
@@ -377,7 +377,7 @@ const MainPage = () => {
               txInDay={bnbInDay}
               scroll={handleScroll}
               touchMove={handleScroll}
-              currency="binancecoin"
+              currency="BNB"
             />
             <Column
               id={online.ton.name}
@@ -388,7 +388,7 @@ const MainPage = () => {
               touchMove={handleScroll}
               online={online.ton.on}
               txInDay={tonInDay}
-              currency="toncoin"
+              currency="TON"
             />
             <Column
               id={online.sol.name}
@@ -421,7 +421,7 @@ const MainPage = () => {
                 online={online.btc.on}
                 scroll={handleScroll}
                 touchMove={handleScroll}
-                currency="bitcoin"
+                currency="BTC"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
@@ -434,7 +434,7 @@ const MainPage = () => {
                 online={online.eth.on}
                 scroll={handleScroll}
                 touchMove={handleScroll}
-                currency="ethereum"
+                currency="ETH"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
@@ -460,7 +460,7 @@ const MainPage = () => {
                 online={online.usdc.on}
                 scroll={handleScroll}
                 touchMove={handleScroll}
-                currency="usd-coin"
+                currency="USDC"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
@@ -473,7 +473,7 @@ const MainPage = () => {
                 txInDay={bnbInDay}
                 scroll={handleScroll}
                 touchMove={handleScroll}
-                currency="binancecoin"
+                currency="BNB"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
@@ -486,7 +486,7 @@ const MainPage = () => {
                 touchMove={handleScroll}
                 online={online.ton.on}
                 txInDay={tonInDay}
-                currency="toncoin"
+                currency="TON"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
