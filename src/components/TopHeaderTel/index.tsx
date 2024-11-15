@@ -155,7 +155,7 @@ const TopHeaderTel = () => {
   const Mes = async () => {
     try {
       const res = await axios.get<{ monData: Message }>("/txMes");
-      setMes(res.data.monData[0].mes);
+      setMes(res.data.monData[0].text);
     } catch (error) {}
   };
 
