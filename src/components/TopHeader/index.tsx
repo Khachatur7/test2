@@ -142,7 +142,7 @@ const TopHeader = () => {
   const Mes = async () => {
     try {
       const res = await axios.get<{ monData: Message }>("/txMes");
-      setPrinterMes(res.data.monData[0].mes);
+      setPrinterMes(res.data.monData[0].text);
     } catch (error) {}
   };
 
@@ -265,8 +265,9 @@ const TopHeader = () => {
       </div>
       <p className="printer_message">
         {printerMes.split(" ")[0]}
-        <span className="color-green">{` ${printerMes.split(" ")[1]} `}</span>
-        {printerMes.split(" ")[2]} 
+       
+       {printerMes.split(" ")[1] && <span className="color-green">{` ${printerMes.split(" ")[1]} `}</span>}
+        {printerMes.split(" ")[2]?printerMes.split(" ")[2]:""} 
       </p>
       <Navigation BiggestTXinDay={BiggestTXinDay} BiggestTXEver={BiggestTXEver}/>
       <div>

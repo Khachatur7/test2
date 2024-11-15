@@ -35,9 +35,9 @@ export interface CoinCount {
 
 export interface Message {
   0 : {
-    mes:string
-    message:string
-    id:string
+    massage:string
+    text:string
+    _id:string
   }
 }
 
