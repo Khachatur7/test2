@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "../../axios";
-import { CoinCount, ItemDataType, TxCounter } from "../../App";
+import { ItemDataType, TxCounter } from "../../App";
 import { Column } from "../../components";
 import TopHeader from "../../components/TopHeader";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import TopHeaderTel from "../../components/TopHeaderTel";
-import { priceReplaceHandler } from "../../handlers";
+// import { priceReplaceHandler } from "../../handlers";
 const MainPage = () => {
   const [btc, setBTC] = useState<ItemDataType[] | null>(null);
   const [eth, setETH] = useState<ItemDataType[] | null>(null);
@@ -30,11 +30,11 @@ const MainPage = () => {
   const [bnbInDay, setBnbInDay] = useState<number | null>(null);
   const [tonInDay, setTonInDay] = useState<number | null>(null);
   const [solInDay, setSolInDay] = useState<number | null>(null);
-  const [coinsCount, setCoinsCount] = useState({
-    bnb: "0",
-    ton: "0",
-    sol:"0"
-  });
+  // const [coinsCount, setCoinsCount] = useState({
+  //   bnb: "0",
+  //   ton: "0",
+  //   sol:"0"
+  // });
 
   const [loading, setLoading] = useState(true);
   const [online, setOnline] = useState({
@@ -241,21 +241,21 @@ const MainPage = () => {
     setState(TxinDay);
   };
 
-  const getCoinCount = async () => {
-    try {
-      const res = await axios.get<{ result: CoinCount[] }>("/frontier");
-      if (res.data) {
+  // const getCoinCount = async () => {
+  //   try {
+  //     const res = await axios.get<{ result: CoinCount[] }>("/frontier");
+  //     if (res.data) {
         
-        setCoinsCount({
-          bnb: res.data.result[0].frontier,
-          ton: res.data.result[1].frontier,
-          sol: res.data.result[2].frontier,
-        });
-      }
-    } catch (error) {
-      console.log(`Не удалось получить данные про количество монет`);
-    }
-  };
+  //       setCoinsCount({
+  //         bnb: res.data.result[0].frontier,
+  //         ton: res.data.result[1].frontier,
+  //         sol: res.data.result[2].frontier,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(`Не удалось получить данные про количество монет`);
+  //   }
+  // };
 
   const updateData = useMemo(() => {
     UpdateData("btc", setBTC, btc);
@@ -280,7 +280,7 @@ const MainPage = () => {
     getTXinDay("bnb", setBnbInDay);
     getTXinDay("ton", setTonInDay);
     getTXinDay("sol", setSolInDay);
-    getCoinCount();
+    // getCoinCount();
     const interval = setInterval(() => {
       setUpdate(true);
     }, 30000);
@@ -384,7 +384,7 @@ const MainPage = () => {
             />
             <Column
               id={online.sol.name}
-              title={`More than\n${priceReplaceHandler(+coinsCount.sol)} SOL`}
+              title={`More than\n50 000 SOL`}
               items={sol}
               countValue={txCounter?.solTx}
               scroll={handleScroll}
@@ -396,7 +396,7 @@ const MainPage = () => {
 
             <Column
               id={online.ton.name}
-              title={`More than\n${priceReplaceHandler(+coinsCount.ton)} TON`}
+              title={`More than\n2 000 000 TON`}
               items={ton}
               countValue={txCounter?.tonTx}
               scroll={handleScroll}
@@ -407,7 +407,7 @@ const MainPage = () => {
             />
             <Column
               id={online.bnb.name}
-              title={`More than\n${priceReplaceHandler(+coinsCount.bnb)} BNB`}
+              title={`More than\n15 000 BNB`}
               items={bnb}
               countValue={txCounter?.bnbTx}
               online={online.bnb.on}
@@ -493,7 +493,7 @@ const MainPage = () => {
             <SwiperSlide style={{ width: "100%" }}>
               <Column
                 id={online.sol.name}
-                title={`More then\n${priceReplaceHandler(+coinsCount.sol)} SOL`}
+                title={`More then\n50 000 SOL`}
                 items={sol}
                 countValue={txCounter?.solTx}
                 scroll={handleScroll}
@@ -506,7 +506,7 @@ const MainPage = () => {
             <SwiperSlide style={{ width: "100%" }}>
               <Column
                 id={online.ton.name}
-                title={`More than\n${priceReplaceHandler(+coinsCount.ton)} TON`}
+                title={`More than\n2 000 000 TON`}
                 items={ton}
                 countValue={txCounter?.tonTx}
                 scroll={handleScroll}
@@ -519,7 +519,7 @@ const MainPage = () => {
             <SwiperSlide style={{ width: "100%" }}>
               <Column
                 id={online.bnb.name}
-                title={`More than\n${priceReplaceHandler(+coinsCount.bnb)} BNB`}
+                title={`More than\n15 000 BNB`}
                 items={bnb}
                 countValue={txCounter?.bnbTx}
                 online={online.bnb.on}

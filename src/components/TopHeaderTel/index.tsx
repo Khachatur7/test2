@@ -41,8 +41,12 @@ const TopHeaderTel = () => {
   const [hoverCount, setHoverCount] = useState<number>(0);
   const [url, setUrl] = useState<string>("");
   const [onShareMenu, setOnShareMenu] = useState(false);
-  const [BiggestTXinDay, setResBiggestTXinDay] = useState<ItemDataType | null>(null);
-  const [BiggestTXEver, setResBiggestTXEver] = useState<ItemDataType | null>(null);
+  const [BiggestTXinDay, setResBiggestTXinDay] = useState<ItemDataType | null>(
+    null
+  );
+  const [BiggestTXEver, setResBiggestTXEver] = useState<ItemDataType | null>(
+    null
+  );
 
   const [mes, setMes] = useState<string>("");
 
@@ -91,7 +95,7 @@ const TopHeaderTel = () => {
       ...usdt.data.result,
       ...bnb.data.result,
       ...ton.data.result,
-      ...sol.data.result
+      ...sol.data.result,
     ];
     if (resData) {
       const today = new Date();
@@ -133,24 +137,22 @@ const TopHeaderTel = () => {
       ...usdt.data.result,
       ...bnb.data.result,
       ...ton.data.result,
-      ...sol.data.result
+      ...sol.data.result,
     ];
     if (resData) {
       let check = resData[0];
       for (let i = 0; i < resData.length; i++) {
         let tx = resData[i];
-      
-          if (tx.dollarValue && check.dollarValue) {
-            if (+check.dollarValue < +tx.dollarValue) {
-              check = tx;
-            }
-      
+
+        if (tx.dollarValue && check.dollarValue) {
+          if (+check.dollarValue < +tx.dollarValue) {
+            check = tx;
+          }
         }
       }
       setResBiggestTXEver(check);
     }
   };
-
 
   const Mes = async () => {
     try {
@@ -163,7 +165,7 @@ const TopHeaderTel = () => {
     Mes();
 
     GetBiggestTxOfDay();
-    GetBiggestTxEver()
+    GetBiggestTxEver();
   }, []);
 
   return (
@@ -297,10 +299,16 @@ const TopHeaderTel = () => {
         <div className="bg-white p-4 flex flex-col gap-5 h-screen">
           <p className="text-2xl color-gold mob_message_text">
             {mes.split(" ")[0]}
-            <span className="color-green">{` ${mes.split(" ")[1]} `}</span>
-            {mes.split(" ")[2]}
+            {mes.split(" ")[1] && (
+              <span className="color-green">{` ${mes.split(" ")[1]} `}</span>
+            )}
+            {mes.split(" ")[2] ? mes.split(" ")[2] : ""}
           </p>
-          <Navigation hamburgerClose={closeMenu} BiggestTXinDay={BiggestTXinDay} BiggestTXEver={BiggestTXEver}/>
+          <Navigation
+            hamburgerClose={closeMenu}
+            BiggestTXinDay={BiggestTXinDay}
+            BiggestTXEver={BiggestTXEver}
+          />
           <div>
             <p className="text-2xl color-gold mb-3">
               Subscribe<span className="color-green"> to the telegram!</span>

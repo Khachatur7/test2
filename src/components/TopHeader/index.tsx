@@ -161,6 +161,7 @@ const TopHeader = () => {
 
   return (
     <div className="max-w-lg bg-white p-8 rounded-r-2xl flex flex-col justify-between ">
+      <div className="big_text">
       <div className="relative">
         <div className="w-3/5 relative">
           <img className="w-full" src={logoImg} alt="logoBigcryptotx" />
@@ -269,6 +270,7 @@ const TopHeader = () => {
        {printerMes.split(" ")[1] && <span className="color-green">{` ${printerMes.split(" ")[1]} `}</span>}
         {printerMes.split(" ")[2]?printerMes.split(" ")[2]:""} 
       </p>
+      </div>
       <Navigation BiggestTXinDay={BiggestTXinDay} BiggestTXEver={BiggestTXEver}/>
       <div>
         <p className="lg:text-2xl 2xl:text-3xl color-gold mb-2">
