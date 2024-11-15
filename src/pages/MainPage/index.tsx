@@ -37,40 +37,49 @@ const MainPage = () => {
   // });
 
   const [loading, setLoading] = useState(true);
-  const [online, setOnline] = useState({
-    btc: {
-      name: "btc",
-      on: false,
-    },
-    eth: {
-      name: "eth",
-      on: false,
-    },
-    usdt: {
-      name: "usdt",
-      on: false,
-    },
-    usdc: {
-      name: "usdc",
-      on: false,
-    },
-    bnb: {
-      name: "bnb",
-      on: false,
-    },
-    sol: {
-      name: "sol",
-      on: false,
-    },
-    ton: {
-      name: "ton",
-      on: false,
-    },
-    xrp: {
-      name: "xrp",
-      on: false,
-    },
-  });
+  // const [online, setOnline] = useState({
+  //   btc: {
+  //     name: "btc",
+  //     on: false,
+  //   },
+  //   eth: {
+  //     name: "eth",
+  //     on: false,
+  //   },
+  //   usdt: {
+  //     name: "usdt",
+  //     on: false,
+  //   },
+  //   usdc: {
+  //     name: "usdc",
+  //     on: false,
+  //   },
+  //   bnb: {
+  //     name: "bnb",
+  //     on: false,
+  //   },
+  //   sol: {
+  //     name: "sol",
+  //     on: false,
+  //   },
+  //   ton: {
+  //     name: "ton",
+  //     on: false,
+  //   },
+  //   xrp: {
+  //     name: "xrp",
+  //     on: false,
+  //   },
+  // });
+  const [btcOnline, setBtcOnline] = useState(false);
+  const [ethOnline, setEthOnline] = useState(false);
+  const [usdtOnline, setUsdtOnline] = useState(false);
+  const [usdcOnline, setUsdcOnline] = useState(false);
+  const [solOnline, setSolOnline] = useState(false);
+  const [tonOnline, setTonOnline] = useState(false);
+  const [bnbOnline, setBnbOnline] = useState(false);
+
+  // console.log(online);
 
   // функция для поиска данных по конкретному 1 роуту из 6
   const getData = async (
@@ -168,40 +177,14 @@ const MainPage = () => {
       if (!res.data) {
         throw Error();
       }
-      setOnline({
-        btc: {
-          name: online.btc.name,
-          on: res.data.answer[10].online,
-        },
-        eth: {
-          name: online.eth.name,
-          on: res.data.answer[11].online,
-        },
-        usdt: {
-          name: online.usdt.name,
-          on: res.data.answer[12].online,
-        },
-        bnb: {
-          name: online.bnb.name,
-          on: res.data.answer[18].online,
-        },
-        usdc: {
-          name: online.usdc.name,
-          on: res.data.answer[16].online,
-        },
-        sol: {
-          name: "sol",
-          on: res.data.answer[19].online,
-        },
-        ton: {
-          name: "ton",
-          on: res.data.answer[29].online,
-        },
-        xrp: {
-          name: "xrp",
-          on: false,
-        },
-      });
+
+      setBtcOnline(res.data.answer[10].online);
+      setEthOnline(res.data.answer[11].online);
+      setUsdtOnline(res.data.answer[12].online);
+      setUsdcOnline(res.data.answer[16].online);
+      setSolOnline(res.data.answer[29].online);
+      setTonOnline(res.data.answer[19].online);
+      setBnbOnline(res.data.answer[18].online);
     } catch (error) {
       console.log("Не удалось получить данные");
     }
@@ -245,7 +228,7 @@ const MainPage = () => {
   //   try {
   //     const res = await axios.get<{ result: CoinCount[] }>("/frontier");
   //     if (res.data) {
-        
+
   //       setCoinsCount({
   //         bnb: res.data.result[0].frontier,
   //         ton: res.data.result[1].frontier,
@@ -281,22 +264,32 @@ const MainPage = () => {
     getTXinDay("ton", setTonInDay);
     getTXinDay("sol", setSolInDay);
     // getCoinCount();
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setUpdate(true);
-    }, 30000);
+    }, 40000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
+  useEffect(() => {
     const txInterval = setInterval(() => {
       getTx();
-    }, 3000);
+    }, 4000);
+    return () => {
+      clearInterval(txInterval);
+    };
+  }, []);
 
+  useEffect(() => {
     const onlineInterval = setInterval(() => {
       getOnline();
-    }, 60000);
-
+    }, 120000);
     return () => {
       clearInterval(onlineInterval);
-      clearInterval(interval);
-      clearInterval(txInterval);
     };
   }, []);
 
@@ -339,78 +332,78 @@ const MainPage = () => {
         window.innerWidth > 768 ? (
           <div className="pt-8 pb-8 flex items-start justify-start gap-2 md:gap-4 w-full overflow-x-auto overflow-y-hidden scrollbar">
             <Column
-              id={online.btc.name}
+              id={"btc"}
               title={"More than\n1 000 BTC"}
               items={btc}
               countValue={txCounter?.btcTx}
               txInDay={btcInDay}
-              online={online.btc.on}
+              online={btcOnline}
               scroll={handleScroll}
               touchMove={handleScroll}
               currency="BTC"
             />
             <Column
-              id={online.eth.name}
+              id={"eth"}
               title={"More than\n10 000 ETH"}
               items={eth}
               countValue={txCounter?.ethTx}
               txInDay={ethInDay}
-              online={online.eth.on}
+              online={ethOnline}
               scroll={handleScroll}
               touchMove={handleScroll}
               currency="ETH"
             />
             <Column
-              id={online.usdt.name}
+              id={"usdt"}
               title={`More than\n30 000 000 USDT`}
               items={usdt}
               countValue={txCounter?.usdtTx}
               txInDay={usdtInDay}
-              online={online.usdt.on}
+              online={usdtOnline}
               scroll={handleScroll}
               touchMove={handleScroll}
               currency="tether"
             />
             <Column
-              id={online.usdc.name}
+              id={"usdc"}
               title={`More than\n30 000 000 USDC`}
               items={usdc}
               countValue={txCounter?.usdcTx}
               txInDay={usdcInDay}
-              online={online.usdc.on}
+              online={usdcOnline}
               scroll={handleScroll}
               touchMove={handleScroll}
               currency="USDC"
             />
             <Column
-              id={online.sol.name}
+              id={"sol"}
               title={`More than\n50 000 SOL`}
               items={sol}
               countValue={txCounter?.solTx}
               scroll={handleScroll}
               touchMove={handleScroll}
               txInDay={solInDay}
-              online={online.sol.on}
+              online={solOnline}
               currency="SOL"
             />
 
             <Column
-              id={online.ton.name}
+              id={"ton"}
               title={`More than\n2 000 000 TON`}
               items={ton}
               countValue={txCounter?.tonTx}
               scroll={handleScroll}
               touchMove={handleScroll}
-              online={online.ton.on}
+              online={tonOnline}
               txInDay={tonInDay}
               currency="TON"
             />
             <Column
-              id={online.bnb.name}
+              id={"bnb"}
               title={`More than\n15 000 BNB`}
               items={bnb}
               countValue={txCounter?.bnbTx}
-              online={online.bnb.on}
+              online={bnbOnline}
               txInDay={bnbInDay}
               scroll={handleScroll}
               touchMove={handleScroll}
@@ -418,12 +411,12 @@ const MainPage = () => {
             />
 
             <Column
-              id={online.xrp.name}
+              id={"xrp"}
               title={`XRP\n(in development)`}
               items={sol}
               disabled
               countValue={txCounter?.xrpTx}
-              online={online.xrp.on}
+              online={false}
             />
           </div>
         ) : (
@@ -440,12 +433,12 @@ const MainPage = () => {
           >
             <SwiperSlide style={{ width: "90%" }}>
               <Column
-                id={online.btc.name}
+                id={"btc"}
                 title={"More than\n1 000 BTC"}
                 items={btc}
                 countValue={txCounter?.btcTx}
                 txInDay={btcInDay}
-                online={online.btc.on}
+                online={btcOnline}
                 scroll={handleScroll}
                 touchMove={handleScroll}
                 currency="BTC"
@@ -453,12 +446,12 @@ const MainPage = () => {
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.eth.name}
+                id={"eth"}
                 title={"More than\n10 000 ETH"}
                 items={eth}
                 countValue={txCounter?.ethTx}
                 txInDay={ethInDay}
-                online={online.eth.on}
+                online={ethOnline}
                 scroll={handleScroll}
                 touchMove={handleScroll}
                 currency="ETH"
@@ -466,12 +459,12 @@ const MainPage = () => {
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.usdt.name}
+                id={"usdt"}
                 title={`More than\n30 000 000 USDT`}
                 items={usdt}
                 countValue={txCounter?.usdtTx}
                 txInDay={usdtInDay}
-                online={online.usdt.on}
+                online={usdtOnline}
                 scroll={handleScroll}
                 touchMove={handleScroll}
                 currency="tether"
@@ -479,12 +472,12 @@ const MainPage = () => {
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.usdc.name}
+                id={"usdc"}
                 title={`More than\n30 000 000 USDC`}
                 items={usdc}
                 countValue={txCounter?.usdcTx}
                 txInDay={usdcInDay}
-                online={online.usdc.on}
+                online={usdcOnline}
                 scroll={handleScroll}
                 touchMove={handleScroll}
                 currency="USDC"
@@ -492,37 +485,37 @@ const MainPage = () => {
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.sol.name}
+                id={"sol"}
                 title={`More then\n50 000 SOL`}
                 items={sol}
                 countValue={txCounter?.solTx}
                 scroll={handleScroll}
                 touchMove={handleScroll}
                 txInDay={solInDay}
-                online={online.sol.on}
+                online={solOnline}
                 currency="SOL"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.ton.name}
+                id={"ton"}
                 title={`More than\n2 000 000 TON`}
                 items={ton}
                 countValue={txCounter?.tonTx}
                 scroll={handleScroll}
                 touchMove={handleScroll}
-                online={online.ton.on}
+                online={tonOnline}
                 txInDay={tonInDay}
                 currency="TON"
               />
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.bnb.name}
+                id={"bnb"}
                 title={`More than\n15 000 BNB`}
                 items={bnb}
                 countValue={txCounter?.bnbTx}
-                online={online.bnb.on}
+                online={bnbOnline}
                 txInDay={bnbInDay}
                 scroll={handleScroll}
                 touchMove={handleScroll}
@@ -532,12 +525,12 @@ const MainPage = () => {
 
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={online.xrp.name}
+                id={"xrp"}
                 title={`XRP\n(in development)`}
                 items={xrp}
                 countValue={txCounter?.xrpTx}
                 disabled
-                online={online.xrp.on}
+                online={false}
               />
             </SwiperSlide>
           </Swiper>

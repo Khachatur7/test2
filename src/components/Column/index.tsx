@@ -234,6 +234,7 @@ const Column: React.FC<ColumnProps> = (props) => {
       (props.topFiat ? 123 : 43)
     }px`,
   };
+// console.log(`${props.currency}:${props.online}`);
 
   useEffect(() => {
     setTimeout(() => {
