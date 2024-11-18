@@ -177,14 +177,31 @@ const MainPage = () => {
       if (!res.data) {
         throw Error();
       }
-
-      setBtcOnline(res.data.answer[10].online);
-      setEthOnline(res.data.answer[11].online);
-      setUsdtOnline(res.data.answer[12].online);
-      setUsdcOnline(res.data.answer[16].online);
-      setSolOnline(res.data.answer[29].online);
-      setTonOnline(res.data.answer[19].online);
-      setBnbOnline(res.data.answer[18].online);
+      
+       if (res.data.answer[20].online) {
+        
+        setSolOnline(res.data.answer[20].online);
+      }
+      if (res.data.answer[19].online) {
+        setTonOnline(res.data.answer[19].online);
+      }
+      if (res.data.answer[18].online) {
+        setBnbOnline(res.data.answer[18].online);
+      }
+      if (res.data.answer[10].online) {
+        setBtcOnline(res.data.answer[10].online);
+      }
+      if (res.data.answer[11].online) {
+        setEthOnline(res.data.answer[11].online);
+      }
+      if (res.data.answer[12].online) {
+        setUsdtOnline(res.data.answer[12].online);
+      }
+      if (res.data.answer[16].online) {
+        setUsdcOnline(res.data.answer[16].online);
+      }
+     
+     
     } catch (error) {
       console.log("Не удалось получить данные");
     }
