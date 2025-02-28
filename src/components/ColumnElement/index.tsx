@@ -204,7 +204,7 @@ Time: ${item.moment}`);
             : 0}
         </span>{" "}
         <span className="uppercase text-gray-300">
-          {!disabled ? item.type : "XRP"}
+          {!disabled ? item.type : "DOGE"}
         </span>
       </p>
       <p className="text-white">

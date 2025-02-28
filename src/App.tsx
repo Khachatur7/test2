@@ -25,6 +25,7 @@ export interface TxCounter {
   solTx: number;
   tonTx: number;
   xrpTx: number 
+  dogeTx:number
 }
 
 export interface CoinCount {

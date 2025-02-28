@@ -20,6 +20,7 @@ const MainPage = () => {
   const [sol, setSol] = useState<ItemDataType[] | null>(null);
   const [ton, setTon] = useState<ItemDataType[] | null>(null);
   const [xrp, setXrp] = useState<ItemDataType[] | null>(null);
+  const [doge, setDoge] = useState<ItemDataType[] | null>(null);
   // Добавил state "update" для включения функции UpdateData каждые 10 сек, которая проверяет,есть ли новая транзакция или нет
   const [update, setUpdate] = useState<boolean>(false);
   const [txCounter, setTxCounter] = useState<TxCounter | null>(null);
@@ -30,6 +31,7 @@ const MainPage = () => {
   const [bnbInDay, setBnbInDay] = useState<number | null>(null);
   const [tonInDay, setTonInDay] = useState<number | null>(null);
   const [solInDay, setSolInDay] = useState<number | null>(null);
+  const [xrpInDay, setXrpInDay] = useState<number | null>(null);
   // const [coinsCount, setCoinsCount] = useState({
   //   bnb: "0",
   //   ton: "0",
@@ -78,6 +80,7 @@ const MainPage = () => {
   const [solOnline, setSolOnline] = useState(false);
   const [tonOnline, setTonOnline] = useState(false);
   const [bnbOnline, setBnbOnline] = useState(false);
+  const [xrpOnline, setXrpOnline] = useState(false);
 
   // console.log(online);
 
@@ -131,8 +134,8 @@ const MainPage = () => {
           setState(currencyItems);
         }
       }
-      if (!xrp?.length && name == "usdt") {
-        setXrp(currencyItems);
+      if (!doge?.length && name == "usdt") {
+        setDoge(currencyItems);
       }
     } catch (error) {
       console.log(`Не удалось получить данные про ${name}`);
@@ -177,7 +180,6 @@ const MainPage = () => {
       if (!res.data) {
         throw Error();
       }
-
       if (res.data.answer[20].online) {
         setSolOnline(res.data.answer[20].online);
       }
@@ -199,8 +201,9 @@ const MainPage = () => {
       if (res.data.answer[16].online) {
         setUsdcOnline(res.data.answer[16].online);
       }
-
-
+      if (res.data.answer[28].online) {
+        setXrpOnline(res.data.answer[28].online);
+      }
     } catch (error) {
       console.log("Не удалось получить данные");
     }
@@ -214,6 +217,7 @@ const MainPage = () => {
     getData("bnb", setBnb, bnb);
     getData("ton", setTon, ton);
     getData("sol", setSol, sol);
+    getData("xrp", setXrp, xrp);
     setLoading(false);
   };
 
@@ -226,8 +230,9 @@ const MainPage = () => {
     const day = today.getDate();
     const month = today.getMonth();
     const year = today.getFullYear();
-    const allNeedDate = `${day < 10 ? "0" : ""}${day}.${month + 1 < 10 ? "0" : ""
-      }${month + 1}.${year}`;
+    const allNeedDate = `${day < 10 ? "0" : ""}${day}.${
+      month + 1 < 10 ? "0" : ""
+    }${month + 1}.${year}`;
     let TxinDay = 0;
     for (let i = 0; i < res.data.result.length; i++) {
       const itemData = res.data.result[i].moment.split(" ")[1];
@@ -263,6 +268,7 @@ const MainPage = () => {
     UpdateData("bnb", setBnb, bnb);
     UpdateData("ton", setTon, ton);
     UpdateData("sol", setSol, sol);
+    UpdateData("xrp", setXrp, xrp);
     setUpdate(false);
   }, [update]);
   console.log(updateData);
@@ -278,6 +284,8 @@ const MainPage = () => {
     getTXinDay("bnb", setBnbInDay);
     getTXinDay("ton", setTonInDay);
     getTXinDay("sol", setSolInDay);
+    getTXinDay("xrp", setXrpInDay);
+
     // getCoinCount();
   }, []);
 
@@ -313,11 +321,13 @@ const MainPage = () => {
   ) => {
     const elem = event.currentTarget;
 
-    if (elem.scrollHeight-1 <= Math.floor(elem.scrollTop + elem.offsetHeight)) {
+    if (
+      elem.scrollHeight - 1 <=
+      Math.floor(elem.scrollTop + elem.offsetHeight)
+    ) {
       const currencyName = elem.getAttribute("id");
 
       if (currencyName == "btc") {
-        console.log(555);
         getData("btc", setBTC, btc);
       } else if (currencyName == "eth") {
         getData("eth", setETH, eth);
@@ -329,6 +339,8 @@ const MainPage = () => {
         getData("bnb", setBnb, bnb);
       } else if (currencyName == "sol") {
         getData("sol", setSol, sol);
+      } else if (currencyName == "xrp") {
+        getData("xrp", setXrp, xrp);
       }
     }
   };
@@ -415,6 +427,18 @@ const MainPage = () => {
               currency="TON"
             />
             <Column
+              id={"xrp"}
+              title={`XRP More than\n10 000 000`}
+              items={xrp}
+              countValue={txCounter?.xrpTx}
+              txInDay={xrpInDay}
+              online={xrpOnline}
+              scroll={handleScroll}
+              touchMove={handleScroll}
+              currency="XRP"
+            />
+
+            <Column
               id={"bnb"}
               title={`More than\n15 000 BNB`}
               items={bnb}
@@ -425,14 +449,13 @@ const MainPage = () => {
               touchMove={handleScroll}
               currency="BNB"
             />
-
             <Column
-              id={"xrp"}
-              title={`XRP\n(in development)`}
-              items={sol}
-              disabled
-              countValue={txCounter?.xrpTx}
+              id={"doge"}
+              title={`DOGE\n(in development)`}
+              items={doge}
+              countValue={txCounter?.dogeTx}
               online={false}
+              disabled
             />
           </div>
         ) : (
@@ -527,6 +550,20 @@ const MainPage = () => {
             </SwiperSlide>
             <SwiperSlide style={{ width: "100%" }}>
               <Column
+                id={"xrp"}
+                title={`XRP More than\n10 000 000`}
+                items={xrp}
+                countValue={txCounter?.xrpTx}
+                txInDay={xrpInDay}
+                online={xrpOnline}
+                scroll={handleScroll}
+                touchMove={handleScroll}
+                currency="XRP"
+              />
+            </SwiperSlide>
+
+            <SwiperSlide style={{ width: "100%" }}>
+              <Column
                 id={"bnb"}
                 title={`More than\n15 000 BNB`}
                 items={bnb}
@@ -538,15 +575,14 @@ const MainPage = () => {
                 currency="BNB"
               />
             </SwiperSlide>
-
             <SwiperSlide style={{ width: "100%" }}>
               <Column
-                id={"xrp"}
-                title={`XRP\n(in development)`}
-                items={xrp}
-                countValue={txCounter?.xrpTx}
-                disabled
+                id={"doge"}
+                title={`DOGE\n(in development)`}
+                items={doge}
+                countValue={txCounter?.dogeTx}
                 online={false}
+                disabled
               />
             </SwiperSlide>
           </Swiper>
